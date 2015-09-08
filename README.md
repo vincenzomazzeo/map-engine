@@ -266,8 +266,8 @@ The Engine needs some classes in order to map query results to objects. More pre
 public abstract T getMap(Map<String, Object> data);
 ```
 that returns an instance of `T` filled with the data passed as argument.
-These pair classes must be placed in the package specified by the `map-package` attribute of the `map` tag and they have to be called using the prefix specified by the attribute `id` of the `retrieve` tag followed by `Map` for the POJO class and `Retrieve` for the retriever class (see [Map](#map) for more details).
-In the example there is only one `retrieve` tag whose `id` attribute is `Catalog` therefore the POJO class is called `CatalogMap` and the retriever class is called `CatalogRetrieve`.
+These pair classes must be placed in the package specified by the `map-package` attribute of the `map` tag and they have to be named using the prefix specified by the attribute `id` of the `retrieve` tag followed by `Map` for the POJO class and `Retrieve` for the retriever class (see [Map](#map) for more details).
+In the example there is only one `retrieve` tag whose `id` attribute is `Catalog` therefore the POJO class is named `CatalogMap` and the retriever class is named `CatalogRetrieve`.
 ```java
 public class CatalogMap {
 
@@ -312,14 +312,14 @@ public class CatalogRetrieve extends AbstractRetrieve<CatalogMap> {
 
 ###### Aggregator
 The `Aggregator` is the interface to be implemented by the class that will pack the result of the mapping.
-Two methods are exposed
+It exposes two methods
 ```java
 public void notifyRetrieveResult(String id, List<Object> data) throws AggregatorException;
 	
 public Object getMapResult() throws AggregatorException;
 ```
 A mapping task could involve multiple queries (`retrieve` tag) in order to transform a XML data document. The queries' results have to be organized to produce a single result. The `Aggregator` is responsible for carrying out this task. After each query, the Engine calls the `notifyRetrieveResult` method: the `id` argument identifies the query and the `data` argument is the list of mapping objects (`CatalogMap` in the example). When all the queries are executed the engine calls the `getMapResult` method: the returned object is the mapping task result.
-The Engine, to instantiate the `Aggregator`, uses a factory defined by the interface `AggregatorFactory` which exposes only one method
+The Engine, in order to instantiate the `Aggregator`, uses a factory defined by the interface `AggregatorFactory` which exposes only one method
 ```java
 public Aggregator make();
 ```
@@ -394,7 +394,7 @@ while the classes' names are defined using the `id` attribute of the `entity` ta
 The `MapEngineRetrieveId` is an enum class containing the values of the `id` attribute of the `entity` tags. This enum could be used by the [`Aggregator`](#aggregator) to determine the query result passed to the  `notifyRetrieveResult` method.
 
 ##### Engine In Action
-Once the directive XML document is ready the Engine could be started.
+Once the directive XML document is ready the Engine can be started.
 ```java
 Engine engine = new Engine(Engine.class.getClassLoader().getResourceAsStream("create_catalog_directives.xml"));
 ByteArrayInputStream xml = getXml();
