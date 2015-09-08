@@ -16,7 +16,7 @@ The Engine is written in Java and uses [H2](http://www.h2database.com/html/main.
 
 ## Build
 
-You'll need a machine with minimum Java 6 and Apache Maven 3 installed.
+You'll need a machine with Java 6 or more and Apache Maven 3 installed.
 
 Checkout:
 
