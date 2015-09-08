@@ -9,7 +9,7 @@ The idea is to use the SQL language to query the XML document and create domain 
 
 A XML map document, created by the developer at design time, is used to instruct the Engine on how to parse the XML document and save the data into the database and how to read them from the database in a more comfortable way.
 
-Jump to the [usage](#Usage) section to see an example!
+Jump to the [usage](#usage) section to see an example!
 
 ## Technologies
 The Engine is written in Java and uses [H2](http://www.h2database.com/html/main.html) as in-memory RDBMS.
