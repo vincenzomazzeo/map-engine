@@ -28,7 +28,7 @@ Run Build:
 
 ## Usage
 The Engine needs a directive XML document to work. 
-This document is used both at design time to create the classes to map the database tables (see [Code Generation](#CodeGeneration) for more details) and at runtime to instruct the Engine on how to read the XML data document and what queries has to execute.
+This document is used both at design time to create the classes to map the database tables (see [Code Generation](#code-generation) for more details) and at runtime to instruct the Engine on how to read the XML data document and what queries has to execute.
 A directive XML document has to be written for each XML data document to map.
 
 ### Clothes Catalog Example
@@ -196,7 +196,7 @@ Let's take a closer look to it.
 
 The directive XML document starts with the tag `engine-directives` which has the boolean attribute `debug` used to enable/disable the debug mode. The debug mode starts the H2 database in server mode in order to inspect the tables.
 
-The `engine-directives` tag contains two children, [`fetch`](#Fetch) and [`map`](#Map).
+The `engine-directives` tag contains two children, [`fetch`](#fetch) and [`map`](#map).
 
 ##### Fetch
 The `fetch` section is used to instruct the Engine on how to parse the XML data document defining implicitly the tables of the schema. First of all is set the XML starting node using the `base-path` attribute. In this example the `base-path` is `catalog` which is the root of the XML data document. 
@@ -214,7 +214,7 @@ The `foreach` tag defines how to fill the table. A new row will be inserted in t
 ```xml
 <foreach value="product/catalog_item">[...]</foreach>
 ```
-The table's columns are defined by the `bind` tag which specifies, moreover, from where to read the value.  The four attributes `attribute`, `type`, `length` and `decimal` define, respectively, the column name, type, length and, if the type is a floating point number, the length of the decimal part. The value of the `bind` tag specifies where to read the value to insert into the cell.  It can be a path or a [function](#FetchFunctions). In the example the table `item` has five columns
+The table's columns are defined by the `bind` tag which specifies, moreover, from where to read the value.  The four attributes `attribute`, `type`, `length` and `decimal` define, respectively, the column name, type, length and, if the type is a floating point number, the length of the decimal part. The value of the `bind` tag specifies where to read the value to insert into the cell.  It can be a path or a [function](#fetch-functions). In the example the table `item` has five columns
 ```xml
 <bind attribute="product_id" type="int">#position(..)</bind>
 <bind attribute="item_id" type="int">#position()</bind>
@@ -222,8 +222,8 @@ The table's columns are defined by the `bind` tag which specifies, moreover, fro
 <bind attribute="item_number" type="varchar" length="7">item_number</bind>
 <bind attribute="price" type="decimal" length="4" decimal="2">price</bind>
 ```
-The column `product_id` is of type integer and will be filled with the value of the function [`position`](#Position) that returns the position of the current `catalog_item` tag.
-The column `item_id` is of type integer and will be filled with the value of the function [`position`](#Position) that returns the position of the current `product` tag.
+The column `product_id` is of type integer and will be filled with the value of the function [`position`](#position) that returns the position of the current `catalog_item` tag.
+The column `item_id` is of type integer and will be filled with the value of the function [`position`](#position) that returns the position of the current `product` tag.
 The column `gender` is of type varchar with length 7 and will be filled with the value of the `gender` attribute of the current `catalog_item` tag.
 The column `item_number` is of type varchar with length 7 and will be filled with the value of the `item_number` tag of the current `catalog_item` tag.
 The column `price` is of type decimal with length 4 and 2 decimals and will be filled with the value of the `price` tag of the current `catalog_item` tag.
@@ -236,11 +236,11 @@ In this example, after the parsing, the `item` table will containt the following
 | 1          | 2       | Women's | RRX9856     | 42.50 |
 
 ##### Map
-The `map` section is used to instruct the Engine on how to read the data from the database. It's defined by the `map` tag which has two attributes, `map-package` that specifies the package where to find the classes needed to [map the query results](#MapQueryResult) and the `aggregator-factory` that specifies the _Factory_ to call to create a new [_Aggregator_](#Aggregator). 
+The `map` section is used to instruct the Engine on how to read the data from the database. It's defined by the `map` tag which has two attributes, `map-package` that specifies the package where to find the classes needed to [map the query results](#map-query-result) and the `aggregator-factory` that specifies the _Factory_ to call to create a new [_Aggregator_](#aggregator). 
 ```xml
 <map map-package="it.alidays.mapengine.test.bm.generated" aggregator-factory="it.alidays.mapengine.test.CatalogAggregatorFactory">[...]</map>
 ```
-Inside the `map` tag there is a set of `retrieve` tags. Each `retrieve` tag specifies the query to be executed against the database. The `id` attribute specifies the prefix of the classes needed to [map the query results](#MapQueryResult).
+Inside the `map` tag there is a set of `retrieve` tags. Each `retrieve` tag specifies the query to be executed against the database. The `id` attribute specifies the prefix of the classes needed to [map the query results](#map-query-result).
 ```xml
 <retrieve id="Catalog">[...]</retrieve>
 ```
@@ -266,7 +266,7 @@ The Engine needs some classes in order to map query results to objects. More pre
 public abstract T getMap(Map<String, Object> data);
 ```
 that returns an instance of `T` filled with the data passed as argument.
-These pair classes must be placed in the package specified by the `map-package` attribute of the `map` tag and they have to be called using the prefix specified by the attribute `id` of the `retrieve` tag followed by `Map` for the POJO class and `Retrieve` for the retriever class (see [Map](#Map) for more details).
+These pair classes must be placed in the package specified by the `map-package` attribute of the `map` tag and they have to be called using the prefix specified by the attribute `id` of the `retrieve` tag followed by `Map` for the POJO class and `Retrieve` for the retriever class (see [Map](#map) for more details).
 In the example there is only one `retrieve` tag whose `id` attribute is `Catalog` therefore the POJO class is called `CatalogMap` and the retriever class is called `CatalogRetrieve`.
 ```java
 public class CatalogMap {
@@ -323,7 +323,7 @@ The Engine, to instantiate the `Aggregator`, uses a factory defined by the inter
 ```java
 public Aggregator make();
 ```
-The class that implements the `AggregatorFactory` must be specified by the `aggregator-factory` attribute of the `retrieve` tag  (see [Map](#Map) for more details).
+The class that implements the `AggregatorFactory` must be specified by the `aggregator-factory` attribute of the `retrieve` tag  (see [Map](#map) for more details).
 ```java
 public class CatalogAggregatorFactory implements AggregatorFactory {
 
@@ -376,7 +376,7 @@ public class CatalogAggregator implements Aggregator {
 ```
 
 ##### Code Generation
-To avoid the boilerplate of writing the pair mapping classes (see [Map Query Result](#MapQueryResult) for details) the Engine is capable to generate them for us.
+To avoid the boilerplate of writing the pair mapping classes (see [Map Query Result](#map-query-result) for details) the Engine is capable to generate them for us.
 The Java class to launch is `it.alidays.mapengine.codegenerator.MapperEngineCodeGenerator`. It accepts two options, the `-d` option that specifies the absolute path to the project sources and the `-s` option that specifies the directive XML document.
 	
 	it.alidays.mapengine.codegenerator.MapperEngineCodeGenerator -d<absolutePathToProjectSources> -s<directiveXmlDocument>
@@ -389,9 +389,9 @@ The package is specified by the `map-package` attribute of the `map` tag
 ```xml
 <map map-package="it.alidays.mapengine.test.bm.generated" aggregator-factory="it.alidays.mapengine.test.CatalogAggregatorFactory">[...]</map>
 ```
-while the classes' names are defined using the `id` attribute of the `entity` tag (see [Map](#Map) and [Map Query Result](#MapQueryResult) for more details).
+while the classes' names are defined using the `id` attribute of the `entity` tag (see [Map](#map) and [Map Query Result](#map-query-result) for more details).
 
-The `MapEngineRetrieveId` is an enum class containing the values of the `id` attribute of the `entity` tags. This enum could be used by the [`Aggregator`](#Aggregator) to determine the query result passed to the  `notifyRetrieveResult` method.
+The `MapEngineRetrieveId` is an enum class containing the values of the `id` attribute of the `entity` tags. This enum could be used by the [`Aggregator`](#aggregator) to determine the query result passed to the  `notifyRetrieveResult` method.
 
 ##### Engine In Action
 Once the directive XML document is ready the Engine could be started.
@@ -405,7 +405,7 @@ for (Catalog catalog : result) {
 engine.shutdown();
 ```
 
->**Note:** The instance of the Engine could - and should because of performance matters (See [Performance](#Performance) for more details) - be reutilized and is thread-safe. The `shutdown` method should be called only at the end.
+>**Note:** The instance of the Engine could - and should because of performance matters (See [Performance](#performance) for more details) - be reutilized and is thread-safe. The `shutdown` method should be called only at the end.
 
 Here is the output
 ![Run output](/images/output.png)
@@ -428,24 +428,24 @@ defines the converters used by the Engine to prepare the SQL statements
 	<database-type-converter type="decimal" class="it.alidays.mapengine.core.schema.converter.DecimalTypeConverter" />
 </database-type-converters>
 ```
-and the [functions](#FetchFunctions) that could be used during the [fetch](#Fetch) step
+and the [functions](#fetch-functions) that could be used during the [fetch](#fetch) step
 ```xml
 <fetch-functions>
 	<fetch-function name="position" class="it.alidays.mapengine.core.fetch.function.PositionFunction" />
 	<fetch-function name="self" class="it.alidays.mapengine.core.fetch.function.SelfFunction" />
 </fetch-functions>
 ```
-The `name` attribute of the `fetch-function` is the name to be used in the `bind` tag of the `map` tag of the directive XML document (see [Fetch](#Fetch) for more details) to use the function.
+The `name` attribute of the `fetch-function` is the name to be used in the `bind` tag of the `map` tag of the directive XML document (see [Fetch](#fetch) for more details) to use the function.
 
 #### Fetch Functions
-During the [fetch](#Fetch) step the Engine navigates the XML data document to extrapolate the data to store into the database. In almost all the cases XPath is used to do this but sometimes special functions are necessary. In these cases it's possible to write a function extending the abstract class `Function` which has only one abstract method
+During the [fetch](#fetch) step the Engine navigates the XML data document to extrapolate the data to store into the database. In almost all the cases XPath is used to do this but sometimes special functions are necessary. In these cases it's possible to write a function extending the abstract class `Function` which has only one abstract method
 ```java
 public abstract Object evaluate(Element node)
 ```
 that returns the object derived by the node passed as argument according to the function.
-To install a new function a `fetch-function` tag has to be added to the [configuration](#Configuration).
+To install a new function a `fetch-function` tag has to be added to the [configuration](#configuration).
 
-Two functions are already defined, [Position](#Position) and [Self](#Self).
+Two functions are already defined, [Position](#position) and [Self](#self).
 
 ##### Position
 The `position` function returns the index of the node inside the parent.
@@ -515,7 +515,7 @@ The Engine uses XPath to navigate the XML DOM so most of the performance are rel
 The Engine uses the Java concurrency during the mapping to improve the performance. Actually the multitasking is not configurable and the `Runtime.getRuntime().availableProcessors()` method is used to determine the executors' thread pools.
 Three thread pools are started, one for the Engine, one for the Fetcher and one for the Mapper.
 
-These are the result in milliseconds of 10 consecutive mapping tasks on my notebook (Intel i7-4600U @ 2.1GHz and 8GB RAM with Windows 7). The XML data document used is 485.504 bytes length and the directive XML document has 15 `entity` (see [Fetch](#Fetch) for more details) tags and 11 `retrieve` tags (see [Map](#Map) for more details).
+These are the result in milliseconds of 10 consecutive mapping tasks on my notebook (Intel i7-4600U @ 2.1GHz and 8GB RAM with Windows 7). The XML data document used is 485.504 bytes length and the directive XML document has 15 `entity` (see [Fetch](#fetch) for more details) tags and 11 `retrieve` tags (see [Map](#map) for more details).
 
 | Run | Fetch | DB Insert | Map | DB Clean | Total |
 | --: | ----: | --------: | --: | -------: | ----: |
