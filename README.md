@@ -9,7 +9,7 @@ The idea is to use the SQL language to query the XML document and create domain 
 
 A XML map document, created by the developer at design time, is used to instruct the Engine on how to parse the XML document and save the data into the database and how to read them from the database in a more comfortable way.
 
-Jump to the [usage](#Usage) section to see an example!
+Jump to the [usage](#usage) section to see an example!
 
 ## Technologies
 The Engine is written in Java and uses [H2](http://www.h2database.com/html/main.html) as in-memory RDBMS.
@@ -229,6 +229,7 @@ The column `item_number` is of type varchar with length 7 and will be filled wit
 The column `price` is of type decimal with length 4 and 2 decimals and will be filled with the value of the `price` tag of the current `catalog_item` tag.
 
 In this example, after the parsing, the `item` table will containt the following data:
+
 | product_id | item_id | gender  | item_number | price |
 | ---------: | ------: | :-----  | ----------: | ----: |
 | 1          | 1       | Men's   | QWZ5671     | 39.95 |
@@ -515,6 +516,7 @@ The Engine uses the Java concurrency during the mapping to improve the performan
 Three thread pools are started, one for the Engine, one for the Fetcher and one for the Mapper.
 
 These are the result in milliseconds of 10 consecutive mapping tasks on my notebook (Intel i7-4600U @ 2.1GHz and 8GB RAM with Windows 7). The XML data document used is 485.504 bytes length and the directive XML document has 15 `entity` (see [Fetch](#Fetch) for more details) tags and 11 `retrieve` tags (see [Map](#Map) for more details).
+
 | Run | Fetch | DB Insert | Map | DB Clean | Total |
 | --: | ----: | --------: | --: | -------: | ----: |
 | 1   | 1749  | 451       | 950 | 18       | 3169  |
