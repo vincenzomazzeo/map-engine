@@ -7,7 +7,7 @@ I've designed and developed this Engine for [Alidays S.p.A.](http://www.alidays.
 
 The idea is to use the SQL language to query the XML document and create domain objects. In order to do this the Engine uses an in-memory relational database as intermediate tier between XML and domain objects.
 
-A XML map document, created by the developer at design time, is used to instruct the Engine on how to parse the XML document and save the data into the database and how to read them from the database in a more comfortable way.
+An XML map document, created by the developer at design time, is used to instruct the Engine on how to parse the XML document and save the data into the database and how to read them from the database in a more comfortable way.
 
 Jump to the [usage](#usage) section to see an example!
 
@@ -32,7 +32,7 @@ This document is used both at design time to create the classes to map the datab
 A directive XML document has to be written for each XML data document to map.
 
 ### Clothes Catalog Example
-In this example is explained how to transform a XML data document containing data about clothes into an object model.
+In this example is explained how to transform an XML data document containing data about clothes into an object model.
 
 #### Catalog XML Data Document
 Following is the XML data document:
@@ -391,7 +391,7 @@ The package is specified by the `map-package` attribute of the `map` tag
 ```
 while the classes' names are defined using the `id` attribute of the `entity` tag (see [Map](#map) and [Map Query Result](#map-query-result) for more details).
 
-The `MapEngineRetrieveId` is an enum class containing the values of the `id` attribute of the `entity` tags. This enum could be used by the [`Aggregator`](#aggregator) to determine the query result passed to the  `notifyRetrieveResult` method.
+The `MapEngineRetrieveId` is an enum class containing the values of the `id` attribute of the `entity` tags. This enum could be used by the [`Aggregator`](#aggregator) to determine the query result passed to the `notifyRetrieveResult` method.
 
 ##### Engine In Action
 Once the directive XML document is ready the Engine can be started.
@@ -411,7 +411,7 @@ Here is the output
 ![Run output](/images/output.png)
 
 ##### Configuration
-The Engine is configured by a XML configuration file.
+The Engine is configured by an XML configuration file.
 
 The configuration specifies the H2 urls to use in the standard mode and in the debug mode
 ```xml
@@ -515,7 +515,7 @@ The Engine uses XPath to navigate the XML DOM so most of the performance are rel
 The Engine uses the Java concurrency during the mapping to improve the performance. Actually the multitasking is not configurable and the `Runtime.getRuntime().availableProcessors()` method is used to determine the executors' thread pools.
 Three thread pools are started, one for the Engine, one for the Fetcher and one for the Mapper.
 
-These are the result in milliseconds of 10 consecutive mapping tasks on my notebook (Intel i7-4600U @ 2.1GHz and 8GB RAM with Windows 7). The XML data document used is 485.504 bytes length and the directive XML document has 15 `entity` (see [Fetch](#fetch) for more details) tags and 11 `retrieve` tags (see [Map](#map) for more details).
+These are the results in milliseconds of 10 consecutive mapping tasks on my notebook (Intel i7-4600U @ 2.1GHz and 8GB RAM with Windows 7). The XML data document used is 485.504 bytes length and the directive XML document has 15 `entity` (see [Fetch](#fetch) for more details) tags and 11 `retrieve` tags (see [Map](#map) for more details).
 
 | Run | Fetch | DB Insert | Map | DB Clean | Total |
 | --: | ----: | --------: | --: | -------: | ----: |
