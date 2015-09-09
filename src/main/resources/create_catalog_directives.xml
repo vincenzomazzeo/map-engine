@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='utf-8'?>
+<engine-directives debug="false">
+
+    <fetch base-path="catalog">
+    	<entity name="product">
+    		<foreach value="product">
+    			<bind attribute="product_id" type="int">#position()</bind>
+    			<bind attribute="description" type="varchar" length="50">@description</bind>
+    			<bind attribute="product_image" type="varchar" length="50">@product_image</bind>
+    		</foreach>
+    	</entity>
+    	
+    	<entity name="item">
+    		<foreach value="product/catalog_item">
+    			<bind attribute="product_id" type="int">#position(..)</bind>
+    			<bind attribute="item_id" type="int">#position()</bind>
+    			<bind attribute="gender" type="varchar" length="7">@gender</bind>
+    			<bind attribute="item_number" type="varchar" length="7">item_number</bind>
+    			<bind attribute="price" type="decimal" length="4" decimal="2">price</bind>
+    		</foreach>
+    	</entity>
+    	
+    	<entity name="item_size">
+    		<foreach value="product/catalog_item/size">
+    			<bind attribute="product_id" type="int">#position(../..)</bind>
+    			<bind attribute="item_id" type="int">#position(..)</bind>
+    			<bind attribute="item_size_id" type="int">#position()</bind>
+    			<bind attribute="description" type="varchar" length="11">@description</bind>
+    		</foreach>
+    	</entity>
+    	
+    	<entity name="item_size_color">
+    		<foreach value="product/catalog_item/size/color_swatch">
+    			<bind attribute="product_id" type="int">#position(../../..)</bind>
+    			<bind attribute="item_id" type="int">#position(../..)</bind>
+    			<bind attribute="item_size_id" type="int">#position(..)</bind>
+    			<bind attribute="item_size_color_id" type="int">#position()</bind>
+    			<bind attribute="image" type="varchar" length="50">@image</bind>
+    			<bind attribute="color" type="varchar" length="10">#self()</bind>
+    		</foreach>
+    	</entity>
+    </fetch>
+
+    <map map-package="it.alidays.mapengine.test.bm.generated" aggregator-factory="it.alidays.mapengine.test.CatalogAggregatorFactory">
+        <retrieve id="Catalog">
+			<![CDATA[
+				select
+					product.description,
+					product.product_image,
+					item.gender,
+					item.item_number,
+					item.price,
+					item_size.description as item_size_description,
+					item_size_color.image,
+					item_size_color.color
+				
+				from
+					product
+					inner join
+					item on	(		
+								product.vuid = item.vuid
+							and	product.product_id = item.product_id
+							)
+					inner join
+					item_size on	(
+										product.vuid = item_size.vuid
+									and product.product_id = item_size.product_id
+									and item.item_id = item_size.item_id
+									)
+					inner join
+					item_size_color on	(
+											product.vuid = item_size_color.vuid
+										and product.product_id = item_size_color.product_id
+										and item.item_id = item_size_color.item_id
+										and item_size.item_size_id = item_size_color.item_size_id
+										)
+				
+				where
+					product.vuid = #vuid#
+				
+				order by
+					item.item_number
+					
+			]]>
+        </retrieve>
+    </map>
+
+</engine-directives>
