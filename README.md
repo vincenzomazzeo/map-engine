@@ -3,7 +3,7 @@ Map Engine
 
 The Map Engine is an engine that, at runtime, maps XML documents to domain objects.
 
-I've designed and developed this Engine for [Alidays S.p.A.](http://www.alidays.it) which has the need to handle many XML documents from service providers. Writing the code to transform these XML documents to domain objects is a really bored and error prone task so the idea of the Engine has came to surface.
+I've designed and developed this Engine for [Alidays S.p.A.](http://www.alidays.it) which has the need to handle many XML documents from service providers. Writing the code to transform these XML documents to domain objects is an annoying and error-prone task so the idea of the Engine has came to surface.
 
 The idea is to use the SQL language to query the XML document and create domain objects. In order to do this the Engine uses an in-memory relational database as intermediate tier between XML and domain objects.
 
